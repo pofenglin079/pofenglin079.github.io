@@ -1,0 +1,121 @@
+@import url(https://fonts.googleapis.com/css?family=Lato:300,900);
+* {
+  box-sizing: border-box;
+}
+
+html, body, div, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, ol, ul, li, form, fieldset, legend, label, table, header, footer, nav, section, figure {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #ecf0f1;
+  min-height: 100%;
+  margin: 0;
+  position: relative;
+  font-family: "Lato";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.header {
+  background: #2c3e50;
+  position: relative;
+  padding: 0 10%;
+  overflow: hidden;
+}
+.header h1 {
+  text-transform: uppercase;
+  font-size: 5em;
+  padding: 2em 0;
+  color: #e67e22;
+  text-align: center;
+  text-shadow: 0px 2px 1px #D35400;
+}
+.header h1 span {
+  display: inline-block;
+}
+
+.content {
+  padding: 2em 10% 80em 10%;
+}
+.content p {
+  color: #34495e;
+  font-size: 2em;
+  font-weight: 300;
+  text-align: center;
+  margin: 2em 0 0 0;
+}
+.content a {
+  color: #e67e22;
+  border-bottom: 1px solid #e67e22;
+  text-decoration: none;
+  display: inline-block;
+  position: relative;
+  transition: all 0.2s;
+  -webkit-transition: all 0.2s;
+  -moz-transition: all 0.2s;
+  -ms-transition: all 0.2s;
+  -o-transition: all 0.2s;
+}
+.content a:hover, .content a:focus {
+  color: #D35400;
+  border-bottom: 1px solid #D35400;
+}
+
+ul.social {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+ul.social li {
+  font-family: "fontello";
+  font-style: normal;
+  font-weight: normal;
+  speak: none;
+  font-size: 1.5em;
+  margin: 1em 0.5em;
+  display: inline-block;
+  position: relative;
+}
+ul.social li a {
+  text-decoration: none;
+  border: 0;
+  text-indent: 9999px;
+  overflow: hidden;
+  position: relative;
+  width: 2em;
+  height: 2em;
+  border-radius: 50%;
+  background: #e67e22;
+  color: #ecf0f1;
+}
+ul.social li a:hover, ul.social li a:focus {
+  border: 0;
+  color: #ecf0f1;
+  background: #D35400;
+  top: 2px;
+}
+
+/* General Responsive */
+@media all and (max-width: 40em) {
+  body {
+    font-size: 0.5em;
+  }
+}
+@media all and (min-width: 40em) and (max-width: 60em) {
+  body {
+    font-size: 0.75em;
+  }
+}
+@media all and (min-width: 60em) and (max-width: 80em) {
+  body {
+    font-size: 1em;
+  }
+}
+@media all and (min-width: 80em) {
+  body {
+    font-size: 1.25em;
+  }
+}
