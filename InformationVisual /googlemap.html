@@ -1,0 +1,1442 @@
+<!DOCTYPE HTML>
+<!--
+	Hielo by TEMPLATED
+	templated.co @templatedco
+	Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
+-->
+<html>
+	<head>
+		<title>商圈資料視覺化</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+	</head>
+	<body class="subpage">
+
+		<!-- Google Tag Manager (noscript)-->
+		    <noscript>
+		      <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PGQ9WQT" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+		    </noscript>
+
+		<!-- Header -->
+			<header id="header">
+				<div class="logo"><a href="index.html">商圈資料視覺化 <span>by BILL LIN</span></a></div>
+				<a href="#menu">Menu</a>
+			</header>
+
+		<!-- Nav -->
+			<nav id="menu">
+				<ul class="links">
+					<li><a href="index.html">首頁</a></li>
+					<!--<li><a href="data.html">顯示數據圖</a></li>-->
+					<li><a href="export.html">輸出CSV</a></li>
+				</ul>
+			</nav>
+
+		<!-- One -->
+		<!---->
+			<section id="One" class="wrapper style3">
+				<div class="inner">
+					<header class="align-center">
+						<p>網路聲量</p>
+						<h2>資訊視覺化系統</h2>
+					</header>
+				</div>
+			</section>
+
+		<!-- Two -->
+			<section id="two" class="wrapper style2">
+				<div class="inner">
+					<div class="box">
+						<div class="content">
+							<header class="align-center">
+								<h2>熱區圖</h2>
+							</header>
+
+							<div id="app" class="container">
+
+							<!-- 搜尋框 -->
+						    <div class="row">
+						      <div class="col google-map">
+						        <h5>Search：</h5>
+						        <div class="form-group">
+						          <input type="text" class="form-control" ref="site" v-model="site">
+						        </div>
+						      </div>
+						    </div>
+
+						    <!-- 功能鍵 -->
+						    <div class="row">
+						      <div class="col google-map">
+						        <h5>功能選單：</h5>
+						        <div class="form-group">
+						          <button type="button" onclick="returnBack()" >回原點</button>
+						          <button type="button" onclick="clearMap()" >清除地圖</button>
+						          <!--
+						          <button type="button" onclick="SocialNetwork()">網路聲量</button>
+						          <button type="button" onclick="returnBack()">人潮</button>
+						      	  -->
+						        </div>
+						        <div class="form-group">
+						          <h6>選擇顯示資料類型</h6>
+						            <form name="mForm1">
+						              　<input type="radio" id="male" name="function" value="function1" checked="checked" onChange="renew_other(1);">
+									    <label for="male">網路聲量</label>
+									    <input type="radio" id="female" name="function" value="function2" onChange="renew_other(2);">
+									    <label for="female">人潮</label>
+						            </form>
+						        </div>
+						        <div class="form-group">
+						          <h6>選擇顯示資料</h6>
+						            <form name="mForm2">
+						              <select name="datas">
+						              　<option value="type1">網路頻論數</option>
+						              	<option value="type2">Facebook 熱門文章評論數</option>
+						              　<option value="type3">評論情緒</option>
+						              </select>
+						            </form>
+						        </div>
+						        <div class="form-group">
+						          <h6>選擇類型</h6>
+						            <form name="mForm">
+						              <select name="type" onChange="renew(this.selectedIndex);">
+						              　<option value="type1">食</option>
+						              　<option value="type2">衣</option>
+						              　<option value="type3">住</option>
+						              　<option value="type4">行</option>
+						                <option value="type5">育樂</option>
+						                <option value="type6">其他</option>
+						              </select>
+
+						              <select name="subitem" onChange="showSubitem(this.selectedIndex);">
+						                <option value="">Bakery</option>
+						                <option value="">Cafe</option>
+						                <option value="">Liquor store</option>
+						                <option value="">Restaurant</option>
+						              </select>
+						            </form>
+						        </div>
+						        <div class="form-group">
+						          <h6>功能</h6>
+						            <form name="mForm3">
+						              <button type="button" onclick="SocialNetwork()">顯示資料</button>
+						            </form>
+						        </div>
+
+						      </div>
+						    </div>
+						    <!-- 放google map的div -->
+						    <div class="row">
+						      <div class="col google-map">
+						          <h5>Google Map：</h5>
+						        <div id="map" class="embed-responsive embed-responsive-16by9"></div>
+						      </div>
+						    </div>
+							<!-- 放評論摘要的div -->
+						    <div class="row" v-if="place != null">
+						      <div class="col" v-if="place.reviews != null">
+						        <h5>評論：</h5>
+						        <div class="row" v-for="p in place.reviews">
+						          <div class="col">
+						            <ul class="list-unstyled">
+						              <li class="media">
+						                <img :src="p.profile_photo_url" class="mr-3">
+						                <div class="media-body">
+						                  <h5 class="mt-0 mb-1">
+						                    <a target="_blank" :href="p.author_url">{{ p.author_name }}</a>
+						                  </h5>
+						                  <p>{{ p.text }}</p>
+						                  <h6>{{ p.relative_time_description }}</h6>
+						                  <h6>{{ p }}</h6>
+
+						                </div>
+						              </li>
+						            </ul>
+						          </div>
+						        </div>
+						      </div>
+						    </div>
+
+
+						</div>
+					</div>
+				</div>
+			</section>
+		
+		<!-- Footer -->
+			<footer id="footer">
+				<div class="container">
+					<ul class="icons">
+						<li><a href="https://www.facebook.com/profile.php?id=100000284940529" class="icon fa-facebook"><span class="label">Facebook</span></a></li>
+						<li><a href="https://www.instagram.com/pofenglin079/" class="icon fa-instagram"><span class="label">Instagram</span></a></li>
+						<li><a href="mailto:pofenglin079@gmail.com" class="icon fa-envelope-o"><span class="label">Email</span></a></li>
+					</ul>
+				</div>
+				<div class="copyright">
+					&copy; Untitled. All rights reserved.
+				</div>
+			</footer>
+
+		<!-- Scripts -->
+			<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC1msBHRPjO-QhcYcPc1Us5D1uIfN4zlik&libraries=places,visualization"></script>
+    		<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.min.js"></script>
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/skel.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+			<!-- map -->
+		    <script>
+		      var global_function_flag = 0;
+
+		      const googleMap = new Vue({
+		        el: '#app',
+		        data: {
+		          map: null,
+		          autocomplete: null,
+		          site: '', // place API要綁定的搜尋框
+		          place: null // 存place確定後回傳的資料
+		        },
+
+		        methods: {
+		          // init google map
+		          initMap() {
+		            // 中心位置：西門捷運站
+		            let location = {
+		              lat: 25.042187,
+		              lng: 121.508115
+		            };
+
+		            this.map = new google.maps.Map(document.getElementById('map'), {
+		              center: location,
+		              zoom: 16
+		            });
+		          },
+
+		          // 地址自動完成 + 地圖的中心移到輸入結果的地址上
+		          siteAuto() {
+		            let options = {
+		              componentRestrictions: { country: 'tw' } // 限制在台灣範圍
+		            };
+		            this.autocomplete = new google.maps.places.Autocomplete(this.$refs.site, options);
+		            this.autocomplete.addListener('place_changed', () => {
+		              this.place = this.autocomplete.getPlace();
+		              if(this.place.geometry) {
+		                let searchCenter = this.place.geometry.location;
+		                this.map.panTo(searchCenter); // panTo是平滑移動、setCenter是直接改變地圖中心
+		                /*
+		                // 放置標記
+		                let marker = new google.maps.Marker({
+		                  position: searchCenter,
+		                  map: this.map
+		                });
+		                
+		                // info window
+		                let infowindow = new google.maps.InfoWindow({
+		                  content: this.place.formatted_address
+		                });
+		                infowindow.open(this.map, marker);
+		                */
+		              }
+		            });
+		          },
+
+		          // 回原點
+		          return(){
+		            //this.place = null;
+		            this.map.panTo({lat: 25.042187,lng: 121.508115});
+		            //this.$refs.site.value = "";
+		          },
+
+		          // 覆蓋一張新的map
+		          overlayout(){
+		            var mapOptions = {
+		              zoom: 16,
+		              center: new google.maps.LatLng(25.042187,121.508115)
+		            }
+
+		            this.map = new google.maps.Map(document.getElementById("map"), mapOptions);
+
+		            var transitLayer = new google.maps.TransitLayer();
+		            transitLayer.setMap(this.map);
+		          },
+
+		          show_food(string){
+		            this.overlayout();
+
+		            var heatmap_bakery = new google.maps.visualization.HeatmapLayer({
+		              data: [
+		                {location: new google.maps.LatLng(25.0453257,121.5073812),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.046976,121.505788),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.044216,121.512783),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.041958,121.509457),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.042102,121.509187),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.043798,121.505412),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0363705,121.5068203),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.04273,121.50641),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0479239,121.517081),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.044238,121.51196),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0452103,121.5142068),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0423149,121.5092645),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0428562,121.5050142),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.04285,121.511394),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0431083,121.5130907),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.043997,121.504576),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0460966,121.5084842),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0556851,121.5202911),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.045299,121.511842),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0428871,121.5116148),weight: (parseInt(Math.random()*9) + 1) }
+		              ],
+		              radius: 30
+		            });
+
+		            var heatmap_cafe = new google.maps.visualization.HeatmapLayer({
+		              data: [
+		                {location: new google.maps.LatLng(25.0397662,121.5054969),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0385985,121.5062166),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.045058,121.505117),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.046459,121.5098559),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0427576,121.5074402),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0445239,121.5081803),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0430379,121.506779),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0446855,121.510119),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.042769,121.506273),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.045888,121.51076),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0427775,121.5077179),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0456972,121.5051101),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0445898,121.5073375),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0435081,121.505886),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.046325,121.509915),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.041668,121.507224),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.042924,121.505745),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.045299,121.511842),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0443082,121.5070203),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0441883,121.5127787),weight: (parseInt(Math.random()*9) + 1) }
+		              ],
+		              radius: 30
+		            });
+
+		            var heatmap_liquor_store = new google.maps.visualization.HeatmapLayer({
+		              data: [
+		                {location: new google.maps.LatLng(25.044611,121.506582),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.021258,121.4966355),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0390461,121.501082),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0506105,121.5272108),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0440539,121.527306),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0557709,121.524221),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0517307,121.5364121),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0485169,121.528331),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.036652,121.498754),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0537769,121.511892),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0522854,121.5295684),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.033423,121.504503),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.035461,121.498285),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.034245,121.517451),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.043632,121.510739),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0414577,121.5392475),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0282792,121.540814),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.053815,121.519624),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0459482,121.5089746),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.035444,121.498645),weight: (parseInt(Math.random()*9) + 1) }
+		              ],
+		              radius: 30
+		            });
+
+		            var heatmap_restaurant = new google.maps.visualization.HeatmapLayer({
+		              data: [
+		                {location: new google.maps.LatLng(25.0437914,121.5067878),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0435666,121.5063238),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.046041,121.508867),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.041541,121.507202),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0397101,121.5053243),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0435229,121.507492),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0431854,121.5060911),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.043566,121.507126),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.044342,121.505972),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0442343,121.5072709),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0434877,121.5059775),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0421609,121.511897),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.044807,121.506211),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0448163,121.5054968),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.044443,121.505753),weight: 3},
+		                {location: new google.maps.LatLng(25.042202,121.512216),weight: 3},
+		                {location: new google.maps.LatLng(25.0438222,121.5071579),weight: 3},
+		                {location: new google.maps.LatLng(25.0450268,121.5075395),weight: 3},
+		                {location: new google.maps.LatLng(25.0434968,121.5066822),weight: 3},
+		                {location: new google.maps.LatLng(25.0433188,121.5076263),weight: 10}
+		              ],
+		              radius: 30
+		            });
+
+		            if (string == "Bakery"){
+		              heatmap_bakery.setMap(this.map);
+		            }
+		            else if (string == "Cafe"){
+		              heatmap_cafe.setMap(this.map);
+		            }
+		            else if (string == "Liquor store"){
+		              heatmap_liquor_store.setMap(this.map);
+		            }
+		            else if (string == "Restaurant"){
+		              heatmap_restaurant.setMap(this.map);
+		            }
+		            else if (string == ""){
+		              alert("here nothing!!!");
+		            }
+		          },
+
+		          show_clothing(string){ 
+		            this.overlayout();
+		            //"Clothingstore", "Jewelry store", "Shoe store"
+		            var heatmap_clothingstore = new google.maps.visualization.HeatmapLayer({
+		              data: [
+		                {location: new google.maps.LatLng(25.041956,121.507),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0438189,121.508059),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0416679,121.5091),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.04169,121.509113),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0415818,121.5065428),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.04169,121.509113),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0441359,121.5061853),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0418234,121.5066105),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0437304,121.5067134),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0429084,121.506877),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0426079,121.507201),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0431514,121.5067512),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0433543,121.5060215),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.043508,121.505886),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.041956,121.507),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0438,121.507418),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0444623,121.5076013),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0417814,121.5060641),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0427494,121.5074793),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.043801,121.5071906),weight: (parseInt(Math.random()*9) + 1) }
+		              ],
+		              radius: 30
+		            });
+
+		            var heatmap_jewelry_store = new google.maps.visualization.HeatmapLayer({
+		              data: [
+		                {location: new google.maps.LatLng(25.043508,121.5058859),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0433649,121.5059945),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0436437,121.5067602),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0471526,121.5124848),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0458195,121.50608),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.042566,121.511653),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0462449,121.5152825),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0508928,121.5132506),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.04495,121.5067781),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0462449,121.5152825),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0425748,121.5046395),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.042691,121.5058236),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0506155,121.5141096),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0406497,121.5042795),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.042428,121.512987),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0362325,121.5012778),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.044223,121.507356),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.049773,121.514554),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0420651,121.5069348),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.03997,121.50232),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.042386,121.512707),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.045296,121.506779),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.044946,121.505784),weight: (parseInt(Math.random()*9) + 1) }
+		              ],
+		              radius: 30
+		            });
+
+		            var heatmap_shoe_store = new google.maps.visualization.HeatmapLayer({
+		              data: [
+		                {location: new google.maps.LatLng(25.043508,121.5058859),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0433649,121.5059945),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0436437,121.5067602),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0471526,121.5124848),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0458195,121.50608),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.042566,121.511653),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0462449,121.5152825),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.04348,121.508254),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0445943,121.5079142),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.043483,121.5077209),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.042666,121.506814),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0443856,121.5078666),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0434699,121.5078039),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0416679,121.5091),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.04495,121.5067781),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0445714,121.5080036),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0462449,121.5152825),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0425748,121.5046395),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.04418,121.507205),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.042691,121.5058236),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0506155,121.5141096),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.044236,121.510398),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.04269,121.50779),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0435129,121.5066929),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0406497,121.5042795),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.042428,121.512987),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0427469,121.512026),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.044223,121.507356),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0420651,121.5069348),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.043414,121.5082299),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.03997,121.50232),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.042386,121.512707),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.045296,121.506779),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.043452,121.50788),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.043298,121.511612),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.042089,121.505891),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0442944,121.5123765),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.044946,121.505784),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.042903,121.511822),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0441098,121.5061518),weight: (parseInt(Math.random()*9) + 1) }
+		              ],
+		              radius: 30
+		            });
+
+		            if (string == "Clothingstore"){
+		              heatmap_clothingstore.setMap(this.map);
+		            }
+		            else if (string == "Jewelry store"){
+		              heatmap_jewelry_store.setMap(this.map);
+		            }
+		            else if (string == "Shoe store"){
+		              heatmap_shoe_store.setMap(this.map);
+		            }
+		            else if (string == ""){
+		              alert("here nothing!!!");
+		            }
+		          },
+
+		          show_live(string){
+		            this.overlayout();
+
+		            var heatmap_lodging = new google.maps.visualization.HeatmapLayer({
+		              data: [
+		                {location: new google.maps.LatLng(25.0407719,121.506922),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.043188,121.506795),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0430379,121.506779),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.041066,121.507541),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0415948,121.5058735),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.042955,121.506768),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0412522,121.5077778),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.043488,121.505978),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0444922,121.5074252),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0447195,121.5062571),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.044218,121.50734),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.042657,121.5079953),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0446334,121.5085772),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.043957,121.5078094),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0446696,121.5086764),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0419055,121.5093133),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0431514,121.5067512),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.042611,121.506969),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0429041,121.5080673),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0427142,121.5094583),weight: 4}
+		              ],
+		              radius: 30
+		            });
+
+		            if (string == "Lodging"){
+		              heatmap_lodging.setMap(this.map);
+		            }
+		            else if (string == ""){
+		              alert("here nothing!!!");
+		            }
+		          },
+
+		          show_transportation(string){
+		            this.overlayout();
+		            //Subway station", "Transit station"
+		            var heatmap_subway_station = new google.maps.visualization.HeatmapLayer({
+		              data: [
+		                {location: new google.maps.LatLng(25.0355361,121.5111932),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0419242,121.5080936),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0448491,121.5233604),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0492666,121.5102369),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.042955,121.506768),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0420743,121.5162786),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0352501,121.5004297),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.052086,121.533002),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.042657,121.5079953),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0335652,121.5357355),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0417882,121.5328524),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0446334,121.5085772),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0326494,121.5183115),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0419055,121.5093133),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0421884,121.5082995),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0478072,121.5170185),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0429041,121.5080673),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.048738,121.514221),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0371623,121.4999007),weight: 10},
+		                {location: new google.maps.LatLng(25.0346119,121.521781),weight: 10}
+		              ],
+		              radius: 30
+		            });
+
+		            var heatmap_transit_station = new google.maps.visualization.HeatmapLayer({
+		              data: [
+		                {location: new google.maps.LatLng(25.0470456,121.5130276),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0380495,121.5071065),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.044996,121.5131185),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.042938,121.522796),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.04783,121.523288),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0413325,121.527122),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0481885,121.5287735),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.048816,121.525989),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.035718,121.504108),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0481295,121.524288),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.047334,121.5136236),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0475091,121.5134567),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0469674,121.5137257),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0601428,121.4920792),weight: (parseInt(Math.random()*9) + 1) }
+		              ],
+		              radius: 30
+		            });
+
+		            if (string == "Subway station"){
+		              heatmap_subway_station.setMap(this.map);
+		            }
+		            else if (string == "Transit station"){
+		              heatmap_transit_station.setMap(this.map);
+		            }
+		            else if (string == ""){
+		              alert("here nothing!!!");
+		            }
+		          },
+
+		          show_entertainment(string){
+		            this.overlayout();
+		            // "Bookstore", "Departmentstore",
+		            // "Electronicsstore", "Florist", "Furniturestore", "Gym", "Library",
+		            // "Movie theater", "Museum", "Nightclub", "Park",
+		            // "Pet store", "Shopping mall", "Store",
+		            // "Supermarket", "Tourist attraction"
+		            var heatmap_bookstore = new google.maps.visualization.HeatmapLayer({
+		              data: [
+		                {location: new google.maps.LatLng(25.0435808,121.5059763),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0429623,121.5129626),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.037241,121.516883),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.043041,121.513371),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0459389,121.511443),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.041207,121.5075616),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0403149,121.503896),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.038652,121.506845),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.043798,121.505412),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0449072,121.5140596),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0381546,121.5081146),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0519112,121.5177347),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0448725,121.5140498),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.042337,121.510994),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0524294,121.520526),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.042933,121.513332),weight: 3},
+		                {location: new google.maps.LatLng(25.0465261,121.5134872),weight: 3},
+		                {location: new google.maps.LatLng(25.0445552,121.5133348),weight: 4},
+		                {location: new google.maps.LatLng(25.0454398,121.5164783),weight: 4},
+		                {location: new google.maps.LatLng(25.0454145,121.5097513),weight: (parseInt(Math.random()*9) + 1) }
+		              ],
+		              radius: 30
+		            });
+
+		            var heatmap_departmentstore = new google.maps.visualization.HeatmapLayer({
+		              data: [
+		                {location: new google.maps.LatLng(25.0435652,121.5062512),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0450209,121.5073581),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.044691,121.5121952),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0458247,121.5084323),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0415964,121.5090779),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.043798,121.505412),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.043508,121.505886),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0461278,121.515325),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0415964,121.5090779),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0415964,121.5090779),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0407582,121.5015644),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0461278,121.515325),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0451617,121.5055717),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0415609,121.5091182),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0540979,121.5257136),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0451603,121.5058027),weight: 5},
+		                {location: new google.maps.LatLng(25.0411353,121.542942),weight: 10},
+		                {location: new google.maps.LatLng(25.0436659,121.5053258),weight: 10},
+		                {location: new google.maps.LatLng(25.0523547,121.5210408),weight: 10},
+		                {location: new google.maps.LatLng(25.0461188,121.5151733),weight: 10}
+		              ],
+		              radius: 30
+		            });
+
+		            var heatmap_electronicsstore = new google.maps.visualization.HeatmapLayer({
+		              data: [
+		                {location: new google.maps.LatLng(25.044443,121.505753),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0435081,121.505886),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0451782,121.5057742),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0429491,121.5056906),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0442689,121.5074969),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.042795,121.506289),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0435309,121.506284),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.052305,121.521102),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0394244,121.5042553),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0452259,121.5064979),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.045587,121.506414),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.045013,121.506367),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0435081,121.505886),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0449299,121.50671),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0461835,121.514866),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.04359,121.5070108),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.044816,121.505697),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.044024,121.532621),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0452108,121.5309095),weight: 10},
+		                {location: new google.maps.LatLng(25.0450021,121.5321956),weight: 10}
+		              ],
+		              radius: 30
+		            });
+
+		            var heatmap_florist = new google.maps.visualization.HeatmapLayer({
+		              data: [
+		                {location: new google.maps.LatLng(25.0540402,121.522092),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.045207,121.5260076),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.035772,121.5018519),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0403705,121.5309079),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0409909,121.5010179),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.047498,121.528393),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0349253,121.5071248),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.034773,121.525115),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0429849,121.5112139),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.035601,121.5014747),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0290449,121.525823),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.040742,121.506632),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0420709,121.507099),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.036056,121.542961),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0521315,121.520677),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.03032,121.517076),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.042466,121.50548),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.058458,121.548224),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.065949,121.523855),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0532653,121.5198524),weight: (parseInt(Math.random()*9) + 1) }
+		              ],
+		              radius: 30
+		            });
+
+		            var heatmap_furniturestore = new google.maps.visualization.HeatmapLayer({
+		              data: [
+		                {location: new google.maps.LatLng(25.0412249,121.5053849),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0412443,121.5066293),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.041138,121.506842),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0406629,121.5053449),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0407719,121.506922),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.044405,121.509383),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.040886,121.506625),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0411739,121.5065199),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.040452,121.505646),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.040631,121.5051549),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0405099,121.503912),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0403669,121.5049),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0404919,121.504224),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.04049,121.504165),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.045079,121.525672),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0391537,121.5039786),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0404919,121.504224),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.040526,121.5035279),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0700642,121.5204828),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.041412,121.533108),weight: (parseInt(Math.random()*9) + 1) }
+		              ],
+		              radius: 30
+		            });
+
+		            var heatmap_gym = new google.maps.visualization.HeatmapLayer({
+		              data: [
+		                {location: new google.maps.LatLng(25.041502,121.507173),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.040967,121.505937),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0444776,121.5083362),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.045818,121.508515),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0452425,121.5064943),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.046385,121.515819),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0461637,121.5052377),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0373206,121.5077808),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0491128,121.5185331),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.044006,121.512417),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.038336,121.505318),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0372541,121.5078815),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0485195,121.5278541),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.030381,121.516788),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0311985,121.5285668),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0486039,121.522959),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0509035,121.523097),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.052264,121.517719),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0508757,121.5276209),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.050856,121.52304),weight: (parseInt(Math.random()*9) + 1) }
+		              ],
+		              radius: 65
+		            });
+
+		            var heatmap_library = new google.maps.visualization.HeatmapLayer({
+		              data: [
+		                {location: new google.maps.LatLng(25.0448779,121.5092303),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0373347,121.5166448),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.043172,121.5035971),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0355504,121.5136061),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0405142,121.5116975),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0385469,121.5023799),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0383315,121.5084164),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0400476,121.5199444),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0502099,121.5209542),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.045734,121.5185139),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0425423,121.5247806),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0452208,121.5199946),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0321933,121.5017185),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0342309,121.5177819),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0291547,121.5383984),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0346522,121.5218265),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.038947,121.516346),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0569105,121.5163941),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.03413,121.516846),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0351162,121.5184863),weight: (parseInt(Math.random()*9) + 1) }
+		              ],
+		              radius: 65
+		            });
+
+		            var heatmap_movie_theater = new google.maps.visualization.HeatmapLayer({
+		              data: [
+		                {location: new google.maps.LatLng(25.0520669,121.5671758),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.049116,121.5185352),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0454059,121.5044089),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0441268,121.5068567),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.045288,121.5049123),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0426412,121.5073112),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0438228,121.5071959),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0437979,121.505412),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0542103,121.5256013),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0430251,121.5073523),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0454511,121.5077728),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0355523,121.5672816),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0452938,121.5063929),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0429522,121.5046175),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0521049,121.5206196),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0451887,121.5291591),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.053279,121.5221609),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0454566,121.5172343),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0387763,121.5255044),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0452739,121.5050167),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.045479,121.503975),weight: (parseInt(Math.random()*9) + 1) }
+		              ],
+		              radius: 65
+		            });
+
+		            var heatmap_museum = new google.maps.visualization.HeatmapLayer({
+		              data: [
+		                {location: new google.maps.LatLng(25.042754,121.515034),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.03934,121.508277),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0398917,121.5108267),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0507246,121.5189745),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0331972,121.5159586),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.038684,121.5189097),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0438971,121.5103974),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.039528,121.518858),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.031664,121.514765),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0469987,121.5113926),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0454919,121.5246624),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.040003,121.507197),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0439687,121.5151757),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0315484,121.5139187),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0335624,121.5115509),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0431034,121.5231768),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0482231,121.5336551),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0502208,121.5364658),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.051225,121.5106299),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0603326,121.5092728),weight: (parseInt(Math.random()*9) + 1) }
+		              ],
+		              radius: 65
+		            });
+
+		            var heatmap_nightclub = new google.maps.visualization.HeatmapLayer({
+		              data: [
+		                {location: new google.maps.LatLng(25.0266949,121.5229545),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0416765,121.5516551),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.041786,121.506315),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.045626,121.5143097),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0462929,121.507861),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0464758,121.5059304),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0438099,121.506118),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0508234,121.5262205),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.050453,121.5242202),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0454279,121.505912),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0353262,121.5680762),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.03531,121.5660665),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0356839,121.56681),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.04174,121.506538),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0703276,121.5217539),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0602973,121.5247861),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.041677,121.551655),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.04947,121.525997),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.044218,121.50734),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0456714,121.5258123),weight: (parseInt(Math.random()*9) + 1) }
+		              ],
+		              radius: 65
+		            });
+
+		            var heatmap_park = new google.maps.visualization.HeatmapLayer({
+		              data: [
+		                {location: new google.maps.LatLng(25.0418254,121.5149875),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0447182,121.5031916),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0390538,121.5147545),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.054116,121.507081),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.032435,121.5349054),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0469529,121.5061213),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0461209,121.5268353),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.041569,121.499946),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0497229,121.507347),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0383724,121.5027404),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0386499,121.4987777),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0424564,121.4995649),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0481838,121.5220179),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0525,121.5261111),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.054189,121.518654),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0360144,121.499914),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0350512,121.5018961),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0321543,121.5297299),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0270313,121.5203177),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.038189,121.5589),weight: (parseInt(Math.random()*9) + 1) }
+		              ],
+		              radius: 65
+		            });
+
+		            var heatmap_pet_store = new google.maps.visualization.HeatmapLayer({
+		              data: [
+		                {location: new google.maps.LatLng(25.1185817,121.5292638),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0459363,121.5039267),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0459612,121.5028283),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.045975,121.502751),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.031241,121.52933),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0346118,121.503647),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0341617,121.5049672),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0337495,121.5371776),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0306722,121.5007941),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0299154,121.516328),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0543049,121.5149119),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0328628,121.5056848),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0310646,121.5012812),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0299249,121.4942789),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0265022,121.5075908),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.052427,121.5177739),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0510626,121.5276176),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0598889,121.5290159),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0570612,121.5238366),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0588352,121.5147982),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0459363,121.5039267),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.1185817,121.5292638),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.031241,121.52933),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0337495,121.5371776),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.045975,121.502751),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0501963,121.5271196),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0341617,121.5049672),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.057543,121.52391),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0543049,121.5149119),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0459612,121.5028283),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0588352,121.5147982),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0265022,121.5075908),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0346118,121.503647),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0306722,121.5007941),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0144519,121.532888),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.038045,121.5565708),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0310646,121.5012812),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0570612,121.5238366),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.017053,121.5322929),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.061412,121.529033),weight: (parseInt(Math.random()*9) + 1) }
+		              ],
+		              radius: 65
+		            });
+
+		            var heatmap_shopping_mall = new google.maps.visualization.HeatmapLayer({
+		              data: [
+		                {location: new google.maps.LatLng(25.0514828,121.5128036),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.050481,121.5144612),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0495614,121.5138922),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.042063,121.506964),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.043656,121.512202),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0451617,121.5055717),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.043231,121.5059674),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0428704,121.5075361),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0448506,121.5042571),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0437465,121.5061233),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0427511,121.5073631),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.041711,121.50678),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.046069,121.51125),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.043687,121.50831),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0431162,121.505782),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0435081,121.505886),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0415012,121.5091114),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.044501,121.505698),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.043489,121.506736),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0424044,121.5077844),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0483944,121.5179297),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0490621,121.5173128),weight: (parseInt(Math.random()*9) + 1) }
+		              ],
+		              radius: 65
+		            });
+
+		            var heatmap_store = new google.maps.visualization.HeatmapLayer({
+		              data: [
+		                {location: new google.maps.LatLng(25.043798,121.505412),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0461957,121.5148909),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.043801,121.5071906),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0446249,121.508538),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0416074,121.5090207),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0437547,121.5065129),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.04347,121.507804),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0427494,121.5074793),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0446267,121.5077937),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0270593,121.521433),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.044456,121.505726),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0436037,121.5071821),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0423182,121.5071003),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.042944,121.505656),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0416679,121.5091),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0421068,121.5092675),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.037703,121.5061818),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.041672,121.508983),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0416679,121.5091),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.043798,121.505412),weight: (parseInt(Math.random()*9) + 1) }
+		              ],
+		              radius: 65
+		            });
+
+		            var heatmap_supermarket = new google.maps.visualization.HeatmapLayer({
+		              data: [
+		                {location: new google.maps.LatLng(25.0416679,121.5091),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0405331,121.5044945),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.044456,121.505726),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0379015,121.505719),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.041741,121.506805),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0403049,121.504023),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0415012,121.5091114),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.039276,121.507961),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.042344,121.511059),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0492084,121.5176146),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0522489,121.514226),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0461637,121.5052377),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.042166,121.511983),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0341599,121.497519),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.05533,121.516772),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0283449,121.502415),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0396605,121.5007902),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0456678,121.52604),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0542103,121.5256013),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0485799,121.5336739),weight: (parseInt(Math.random()*9) + 1) }
+		              ],
+		              radius: 65
+		            });
+
+		            var heatmap_tourist_attraction = new google.maps.visualization.HeatmapLayer({
+		              data: [
+		                {location: new google.maps.LatLng(25.0420139,121.5068592),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.044584,121.5075324),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0434901,121.5071915),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0441478,121.5067329),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0399954,121.5071662),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.047725,121.51123),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0398948,121.5127178),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0465304,121.5276613),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.044808,121.5046257),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0366776,121.5176189),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0310042,121.508655),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0400306,121.5602452),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.04319,121.5096789),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0269931,121.5740113),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0346119,121.521781),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0402702,121.5066577),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0418254,121.5149875),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0400826,121.5119547),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.036756,121.5026042),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0308076,121.5295769),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.044584,121.5075324),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0399954,121.5071662),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0441478,121.5067329),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0434901,121.5071915),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.047725,121.51123),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.044808,121.5046257),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0420139,121.5068592),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.039063,121.517657),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.036756,121.5026042),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0355197,121.4995184),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0381405,121.5027018),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0332027,121.4950648),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0578503,121.4995579),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0381642,121.498483),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0413526,121.4991948),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0373399,121.4982542),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0471336,121.5250527),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0308076,121.5295769),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0569669,121.5078537),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0630328,121.5200744),weight: (parseInt(Math.random()*9) + 1) }
+		              ],
+		              radius: 65
+		            });
+
+		            if (string == "Bookstore"){
+		              heatmap_bookstore.setMap(this.map);
+		            }
+		            else if (string == "Departmentstore"){
+		              heatmap_departmentstore.setMap(this.map);
+		            }
+		            else if (string == "Electronicsstore"){
+		              heatmap_electronicsstore.setMap(this.map);
+		            }
+		            else if (string == "Florist"){
+		              heatmap_florist.setMap(this.map);
+		            }
+		            else if (string == "Furniturestore"){
+		              heatmap_furniturestore.setMap(this.map);
+		            }
+		            else if (string == "Gym"){
+		              heatmap_gym.setMap(this.map);
+		            }
+		            else if (string == "Library"){
+		              heatmap_library.setMap(this.map);
+		            }
+		            else if (string == "Movie theater"){
+		              heatmap_movie_theater.setMap(this.map);
+		            }
+		            else if (string == "Museum"){
+		              heatmap_museum.setMap(this.map);
+		            }
+		            else if (string == "Nightclub"){
+		              heatmap_nightclub.setMap(this.map);
+		            }
+		            else if (string == "Park"){
+		              heatmap_park.setMap(this.map);
+		            }
+		            else if (string == "Pet store"){
+		              heatmap_pet_store.setMap(this.map);
+		            }
+		            else if (string == "Shopping mall"){
+		              heatmap_shopping_mall.setMap(this.map);
+		            }
+		            else if (string == "Store"){
+		              heatmap_store.setMap(this.map);
+		            }
+		            else if (string == "Supermarket"){
+		              heatmap_supermarket.setMap(this.map);
+		            }
+		            else if (string == "Tourist attraction"){
+		              heatmap_tourist_attraction.setMap(this.map);
+		            }
+		            else if (string == ""){
+		              alert("here nothing!!!");
+		            }
+
+		          },
+
+		          show_other(string){
+		            this.overlayout();
+		            //"Dentist", "Drugstore", "Hospital", "Pharmacy"
+		            var heatmap_dentist = new google.maps.visualization.HeatmapLayer({
+		              data: [
+		                {location: new google.maps.LatLng(25.0454119,121.506842),weight: (parseInt(Math.random()*9) + 1)},
+		                {location: new google.maps.LatLng(25.023675,121.5213107),weight: (parseInt(Math.random()*9) + 1)},
+		                {location: new google.maps.LatLng(25.0309977,121.5007244),weight: (parseInt(Math.random()*9) + 1)},
+		                {location: new google.maps.LatLng(25.0334859,121.5190599),weight: (parseInt(Math.random()*9) + 1)},
+		                {location: new google.maps.LatLng(25.0457613,121.5180933),weight: (parseInt(Math.random()*9) + 1)},
+		                {location: new google.maps.LatLng(25.0400239,121.506035),weight: (parseInt(Math.random()*9) + 1)},
+		                {location: new google.maps.LatLng(25.0264889,121.5515281),weight: (parseInt(Math.random()*9) + 1)},
+		                {location: new google.maps.LatLng(25.033491,121.5446716),weight: (parseInt(Math.random()*9) + 1)},
+		                {location: new google.maps.LatLng(25.0529272,121.5198509),weight: (parseInt(Math.random()*9) + 1)},
+		                {location: new google.maps.LatLng(25.052651,121.521116),weight: (parseInt(Math.random()*9) + 1)},
+		                {location: new google.maps.LatLng(25.05152,121.529342),weight: (parseInt(Math.random()*9) + 1)},
+		                {location: new google.maps.LatLng(25.0296982,121.5305388),weight: (parseInt(Math.random()*9) + 1)},
+		                {location: new google.maps.LatLng(25.0267173,121.5189702),weight: (parseInt(Math.random()*9) + 1)},
+		                {location: new google.maps.LatLng(25.042032,121.513035),weight: (parseInt(Math.random()*9) + 1)},
+		                {location: new google.maps.LatLng(25.048533,121.5351119),weight: (parseInt(Math.random()*9) + 1)},
+		                {location: new google.maps.LatLng(25.0441523,121.5446234),weight: (parseInt(Math.random()*9) + 1)},
+		                {location: new google.maps.LatLng(25.0447906,121.5149051),weight: (parseInt(Math.random()*9) + 1)},
+		                {location: new google.maps.LatLng(25.0429756,121.5267858),weight: (parseInt(Math.random()*9) + 1)},
+		                {location: new google.maps.LatLng(25.0420013,121.541747),weight: (parseInt(Math.random()*9) + 1)},
+		                {location: new google.maps.LatLng(25.02846,121.545321),weight: (parseInt(Math.random()*9) + 1)}
+		              ],
+		              radius: 65
+		            });
+
+		            var heatmap_drugstore = new google.maps.visualization.HeatmapLayer({
+		              data: [
+		                {location: new google.maps.LatLng(25.0427071,121.5057901),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0426079,121.507201),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.04209,121.509665),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.044207,121.507549),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0452339,121.5052271),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0452471,121.505313),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0463846,121.5178642),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0421689,121.513346),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0452409,121.5146734),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0444911,121.516161),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0407818,121.5668529),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0526999,121.519432),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0487857,121.518569),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0460841,121.518607),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0555205,121.52533),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0422617,121.5093389),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.053477,121.543845),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0335425,121.5294642),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0505356,121.5251244),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.036062,121.499211),weight: (parseInt(Math.random()*9) + 1) }
+		              ],
+		              radius: 65
+		            });
+
+		            var heatmap_hospital = new google.maps.visualization.HeatmapLayer({
+		              data: [
+		                {location: new google.maps.LatLng(25.0443235,121.5049198),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.041664,121.503566),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0406785,121.5189691),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.035561,121.5065878),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0511327,121.5094194),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0416742,121.5035665),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0368881,121.4980399),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0586774,121.5222161),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0290818,121.5192683),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.02402,121.509808),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0277299,121.4943799),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0479157,121.5474078),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0372057,121.5452242),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.062801,121.499882),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0382016,121.5466815),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0162265,121.5300004),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0366811,121.5499095),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.011904,121.517908),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0418483,121.5473954),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.036935,121.5536725),weight: (parseInt(Math.random()*9) + 1) }
+		              ],
+		              radius: 65
+		            });
+
+		            var heatmap_pharmacy = new google.maps.visualization.HeatmapLayer({
+		              data: [
+		                {location: new google.maps.LatLng(25.0422347,121.5126494),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.040631,121.505155),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.041029,121.506155),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.042073,121.505842),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0450693,121.5143021),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0421783,121.5045676),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0451638,121.5080706),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.043809,121.5040231),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0424439,121.506874),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0454517,121.5075019),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0395668,121.5060739),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0455663,121.5087943),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0463709,121.5105192),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.044232,121.51213),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.04155,121.5034096),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.0444958,121.5240153),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.043555,121.5155),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.042188,121.512827),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.05369,121.510661),weight: (parseInt(Math.random()*9) + 1) },
+		                {location: new google.maps.LatLng(25.046682,121.506187),weight: (parseInt(Math.random()*9) + 1) }
+		              ],
+		              radius: 65
+		            });
+
+		            if (string == "Dentist"){
+		              heatmap_dentist.setMap(this.map);
+		            }
+		            else if (string == "Drugstore"){
+		              heatmap_drugstore.setMap(this.map);
+		            }
+		            else if (string == "Hospital"){
+		              heatmap_hospital.setMap(this.map);
+		            }
+		            else if (string == "Pharmacy"){
+		              heatmap_pharmacy.setMap(this.map);
+		            }
+		            else if (string == ""){
+		              alert("here nothing!!!");
+		            }
+		          },
+
+		          show_bus(){
+		            this.overlayout();
+		            var heatmap_1 = new google.maps.visualization.HeatmapLayer({
+		              data: [
+		                {location: new google.maps.LatLng(25.041816, 121.507798),weight: 10},
+		                {location: new google.maps.LatLng(25.042622, 121.508323),weight: 8},
+		                {location: new google.maps.LatLng(25.042146, 121.507486),weight: 7},
+		                {location: new google.maps.LatLng(25.041698, 121.507883),weight: 8},
+		                {location: new google.maps.LatLng(25.042923, 121.506413),weight: 9},
+		                {location: new google.maps.LatLng(25.044838, 121.508667),weight: 5},
+		                {location: new google.maps.LatLng(25.041698, 121.505147),weight: 3},
+		                {location: new google.maps.LatLng(25.043536, 121.503731),weight: 2 },
+		                {location: new google.maps.LatLng(25.042768, 121.502325),weight: 8},
+		                {location: new google.maps.LatLng(25.045052, 121.503076),weight: 2 },
+		                {location: new google.maps.LatLng(25.044858, 121.505394),weight: 4},
+		                {location: new google.maps.LatLng(25.046210, 121.509579),weight: 9}
+		              ],
+		              radius: 65
+		            });
+		            heatmap_1.setMap(this.map);
+		          },
+
+		          show_mrt(){
+		            this.overlayout();
+		            var heatmap_1 = new google.maps.visualization.HeatmapLayer({
+		              data: [
+		                {location: new google.maps.LatLng(25.042135, 121.507572),weight: 8},
+		                {location: new google.maps.LatLng(25.041464, 121.508343),weight: 3},
+		                {location: new google.maps.LatLng(25.041832, 121.508829),weight: 6},
+		                {location: new google.maps.LatLng(25.042256, 121.508957),weight: 5},
+		                {location: new google.maps.LatLng(25.042867, 121.508781),weight: 4},
+		                {location: new google.maps.LatLng(25.042559, 121.507748),weight: 10}
+		              ],
+		              radius: 65
+		            });
+		            heatmap_1.setMap(this.map);
+		            this.map.zoom = 18
+		          }
+
+
+		          // here add new map function
+
+		        },
+
+		        mounted() {
+		          window.addEventListener('load', () => {
+		            this.initMap();
+		            this.siteAuto();
+		            //this.show_food("Bakery");
+		          });
+		        }
+		      })
+
+		      // other function
+		      // 回原點
+		      function returnBack() {
+		        googleMap.return();
+		        global_function_flag = 0;
+		      }
+
+		      // 清除地圖(覆蓋一張map) 
+		      function clearMap(){
+		        googleMap.overlayout();
+		      }
+
+		      // 顯示網路聲量圖
+		      function SocialNetwork(){
+		      	googleMap.overlayout();
+		      	if (document.mForm1.function[0].checked){
+		      		if (document.mForm.type.options[document.mForm.type.options.selectedIndex].value == "type1"){
+			          googleMap.show_food(document.mForm.subitem.options[document.mForm.subitem.options.selectedIndex].text);
+			        }
+			        else if (document.mForm.type.options[document.mForm.type.options.selectedIndex].value == "type2"){
+			          googleMap.show_clothing(document.mForm.subitem.options[document.mForm.subitem.options.selectedIndex].text);
+			        }
+			        else if (document.mForm.type.options[document.mForm.type.options.selectedIndex].value == "type3"){
+			          googleMap.show_live(document.mForm.subitem.options[document.mForm.subitem.options.selectedIndex].text);
+			        }
+			        else if (document.mForm.type.options[document.mForm.type.options.selectedIndex].value == "type4"){
+			          googleMap.show_transportation(document.mForm.subitem.options[document.mForm.subitem.options.selectedIndex].text);
+			        }
+			        else if (document.mForm.type.options[document.mForm.type.options.selectedIndex].value == "type5"){
+			          googleMap.show_entertainment(document.mForm.subitem.options[document.mForm.subitem.options.selectedIndex].text);
+			        }
+			        else if (document.mForm.type.options[document.mForm.type.options.selectedIndex].value == "type6"){
+			          googleMap.show_other(document.mForm.subitem.options[document.mForm.subitem.options.selectedIndex].text);
+			        }
+
+			        global_function_flag = 1;
+		      	}else {
+		          	if (document.mForm2.datas.options[document.mForm2.datas.selectedIndex].value == "公車人數"){
+		          		googleMap.show_bus();
+		          	}else if(document.mForm2.datas.options[document.mForm2.datas.selectedIndex].value == "捷運出入站人口數"){
+		          		googleMap.show_mrt();
+		          	}
+		      		//var ran=parseInt(Math.random()*3);
+		      	}
+		      }
+
+		      // 下拉式選單function, S
+		      subitems=new Array();
+		      subitems[0]=["Bakery", "Cafe", "Liquor store", "Restaurant"];
+		      subitems[1]=["Clothingstore", "Jewelry store", "Shoe store"];
+		      subitems[2]=["Lodging"];
+		      subitems[3]=["Subway station", "Transit station"];
+		      subitems[4]=["Bookstore", "Departmentstore",
+		                   "Electronicsstore", "Florist", "Furniturestore", "Gym", "Library",
+		                   "Movie theater", "Museum", "Nightclub", "Park",
+		                   "Pet store", "Shopping mall", "Store",
+		                   "Supermarket", "Tourist attraction"];
+		      subitems[5]=["Dentist", "Drugstore", "Hospital", "Pharmacy"];
+
+		      function renew(index){
+		        for(var i=0;i<subitems[index].length;i++)
+		          document.mForm.subitem.options[i]=new Option(subitems[index][i], subitems[index][i]); // 設定新選項
+		        document.mForm.subitem.length=subitems[index].length; // 刪除多餘的選項
+
+
+		        if (global_function_flag != 1){
+		          return;
+		        }
+
+		        if (document.mForm.type.options[document.mForm.type.options.selectedIndex].value == "type1"){
+		          googleMap.show_food(document.mForm.subitem.options[document.mForm.subitem.options.selectedIndex].text);
+		        }
+		        else if (document.mForm.type.options[document.mForm.type.options.selectedIndex].value == "type2"){
+		          googleMap.show_clothing(document.mForm.subitem.options[document.mForm.subitem.options.selectedIndex].text);
+		        }
+		        else if (document.mForm.type.options[document.mForm.type.options.selectedIndex].value == "type3"){
+		          googleMap.show_live(document.mForm.subitem.options[document.mForm.subitem.options.selectedIndex].text);
+		        }
+		        else if (document.mForm.type.options[document.mForm.type.options.selectedIndex].value == "type4"){
+		          googleMap.show_transportation(document.mForm.subitem.options[document.mForm.subitem.options.selectedIndex].text);
+		        }
+		        else if (document.mForm.type.options[document.mForm.type.options.selectedIndex].value == "type5"){
+		          googleMap.show_entertainment(document.mForm.subitem.options[document.mForm.subitem.options.selectedIndex].text);
+		        }
+		        else if (document.mForm.type.options[document.mForm.type.options.selectedIndex].value == "type6"){
+		          googleMap.show_other(document.mForm.subitem.options[document.mForm.subitem.options.selectedIndex].text);
+		        }
+		        else{
+		           alert("Else1");
+		        }
+		      }
+
+		      function showSubitem(index){
+		        //document.mForm.subitem.options[index].text：第 i 個選項的文字
+		        //document.mForm.subitem.options[index].value：第 i 個選項的值
+		        //alert("1:" + document.mForm.subitem.options[index].text +"\n2:"+document.mForm.subitem.options[index].value);
+		        if (global_function_flag != 1){
+		          return;
+		        }
+
+		        if (document.mForm.type.options[document.mForm.type.options.selectedIndex].value == "type1"){
+		           googleMap.show_food(document.mForm.subitem.options[index].text);
+		        }
+		        else if (document.mForm.type.options[document.mForm.type.options.selectedIndex].value == "type2"){
+		           googleMap.show_clothing(document.mForm.subitem.options[index].text);
+		        }
+		        else if (document.mForm.type.options[document.mForm.type.options.selectedIndex].value == "type3"){
+		           googleMap.show_live(document.mForm.subitem.options[index].text);
+		        }
+		        else if (document.mForm.type.options[document.mForm.type.options.selectedIndex].value == "type4"){
+		           googleMap.show_transportation(document.mForm.subitem.options[index].text);
+		        }
+		        else if (document.mForm.type.options[document.mForm.type.options.selectedIndex].value == "type5"){
+		           googleMap.show_entertainment(document.mForm.subitem.options[index].text);
+		        }
+		        else if (document.mForm.type.options[document.mForm.type.options.selectedIndex].value == "type6"){
+		           googleMap.show_other(document.mForm.subitem.options[index].text);
+		        }
+		        else{
+		           alert("Else2");
+		        }
+		      }
+		      // 下拉式選單function, E
+
+		      function renew_other(index){
+		      	//alert("1:" + document.mForm.subitem.options[index].text +"\n2:"+document.mForm.subitem.options[index].value);
+		      	if (index == "1"){
+		      		document.mForm2.datas.options[0]= new Option("評論數", "評論數"); // 設定新選項
+		          	document.mForm2.datas.options[1]= new Option("Facebook 評論數", "Facebook 評論數"); // 設定新選項
+		          	document.mForm2.datas.options[2]= new Option("評論情緒", "評論情緒"); // 設定新選項
+		        	document.mForm2.datas.length=3; // 刪除多餘的選項
+		  		}else if (index == "2"){
+		          	document.mForm2.datas.options[0]= new Option("公車人數", "公車人數"); // 設定新選項
+		          	document.mForm2.datas.options[1]= new Option("捷運出入站人口數", "捷運出入站人口數"); // 設定新選項
+		        	document.mForm2.datas.length=2; // 刪除多餘的選項
+		  		}
+
+		      }
+		    </script>
+	</body>
+</html>

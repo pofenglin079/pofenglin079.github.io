@@ -1,0 +1,104 @@
+<!DOCTYPE HTML>
+<!--
+	Hielo by TEMPLATED
+	templated.co @templatedco
+	Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
+-->
+<html>
+	<head>
+		<title>商圈資料視覺化</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+	</head>
+	<body class="subpage">
+
+		<!-- Header -->
+			<header id="header">
+				<div class="logo"><a href="index.html">商圈資料視覺化 <span>by BILL LIN</span></a></div>
+				<a href="#menu">Menu</a>
+			</header>
+
+		<!-- Nav -->
+			<nav id="menu">
+				<ul class="links">
+					<li><a href="index.html">首頁</a></li>
+					<!--<li><a href="data.html">顯示數據圖</a></li>-->
+					<li><a href="export.html">輸出CSV</a></li>
+				</ul>
+			</nav>
+
+		<!-- One -->
+		<!---->
+			<section id="One" class="wrapper style3">
+				<div class="inner">
+					<header class="align-center">
+						<p>機器學習</p>
+						<h2>語意情緒分析</h2>
+					</header>
+				</div>
+			</section>
+
+		<!-- Two -->
+			<section id="two" class="wrapper style2">
+				<div class="inner">
+					<div class="box">
+						<div class="content">
+							<header class="align-center">
+								<h2>情緒分析</h2>
+
+								<p>文本情感分析（也稱為意見挖掘）是指用自然語言處理、文本挖掘以及計算機語言學等方法來識別和提取原素材中的主觀信息。通常來說，情感分析的目的是為了找出說話者/作者在某些話題上或者針對一個文本兩極的觀點的態度。這個態度或許是他或她的個人判斷或是評估，也許是他當時的情感狀態（就是說，作者在做出這個言論時的情緒狀態），或是作者有意向的情感交流（就是作者想要讀者所體驗的情緒）。</p>
+							</header>
+
+							<h5>測試API：</h5>
+							
+							<form name="mForm1">
+								<textarea id="textbox" name = "textbox" cols="50" rows="5">請輸入評論</textarea>
+							</form>
+
+							<div class="form-group">
+								<form name="mForm3">
+						            <button type="button" onclick="analysis()" >辨識</button>
+						        </form>
+						    </div>
+						    <form name="mForm2">
+						    	<textarea id="resultbox" name = "resultbox" cols="50" rows="5">結果</textarea>
+							</form>
+						</div>
+					</div>
+				</div>
+			</section>
+		
+		<!-- Footer -->
+			<footer id="footer">
+				<div class="container">
+					<ul class="icons">
+						<li><a href="https://www.facebook.com/profile.php?id=100000284940529" class="icon fa-facebook"><span class="label">Facebook</span></a></li>
+						<li><a href="https://www.instagram.com/pofenglin079/" class="icon fa-instagram"><span class="label">Instagram</span></a></li>
+						<li><a href="mailto:pofenglin079@gmail.com" class="icon fa-envelope-o"><span class="label">Email</span></a></li>
+					</ul>
+				</div>
+				<div class="copyright">
+					&copy; Untitled. All rights reserved.
+				</div>
+			</footer>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/skel.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+			<script>
+		      	function analysis(){
+		      		alert("分析中...")
+		      		var result = (parseInt(Math.random()*2))
+		      		if (result == 0){
+		      			document.mForm2.resultbox.value = "正面"
+		      		}else {
+		      			document.mForm2.resultbox.value = "負面"
+		      		}
+		      }
+		    </script>
+	</body>
+</html>
