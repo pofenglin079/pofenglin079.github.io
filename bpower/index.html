@@ -1,1 +1,27 @@
+<html>
+<head>
+  <title>Redirect...</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <script>
+    var appurl = 'Bpower://invitation=';
+    var appstore = 'https://tag4h4.axshare.com/';
 
+    var timeout;
+    function start() {
+      window.location = appurl;
+      timeout = setTimeout(function(){
+        if(confirm('馬上安裝結婚吧APP?')){
+          document.location = appstore;
+        }
+      }, 1000);
+    }
+
+    window.onload = function() {
+      start()
+    }
+  </script>
+</head>
+<body>
+
+</body>
+</html>
