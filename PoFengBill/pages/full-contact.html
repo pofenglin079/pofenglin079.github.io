@@ -9,10 +9,11 @@ Licence URI: https://www.os-templates.com/template-terms
 <html lang="">
 <!-- To declare your language - read more here: https://www.w3.org/International/questions/qa-html-language-declarations -->
 <head>
-<title>Bill Lin | Jobs</title>
+<title>Bill Lin | Contact Me </title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <link href="../layout/styles/layout.css" rel="stylesheet" type="text/css" media="all">
+<script src="https://smtpjs.com/v3/smtp.js"></script>  
 </head>
 <body id="top">
 <!-- ################################################################################################ -->
@@ -31,16 +32,16 @@ Licence URI: https://www.os-templates.com/template-terms
         <ul class="clear">
           <li><a href="../index.html">首頁</a></li>
           <li><a href="full-story.html">關於我</a></li>
-          <li class="active"><a class="drop" href="full-joblist.html">工作經歷</a>
+          <li><a class="drop" href="full-joblist.html">工作經歷</a>
             <ul>
-              <li><a href="#">幣威科技(美商艾普洛特)</a></li>
-              <li><a href="#">鴻齡科技股份有限公司</a></li>
-              <li><a href="#">仁寶電腦工業股份有限公司</a></li>
+              <li><a href="full-joblist.html">幣威科技(美商艾普洛特)</a></li>
+              <li><a href="full-joblist.html">鴻齡科技股份有限公司</a></li>
+              <li><a href="full-joblist.html">仁寶電腦工業股份有限公司</a></li>
               <li><a href="#">富士康國際股份有限公司</a></li>
             </ul>
           </li>
           <li><a href="portfolio.html">作品集</a></li>
-          <li><a href="full-contact.html">聯絡我</a></li>
+          <li class="active"><a href="full-contact.html">聯絡我</a></li>
         </ul>
       </nav>
       <!-- ################################################################################################ -->
@@ -53,7 +54,7 @@ Licence URI: https://www.os-templates.com/template-terms
     <!-- ################################################################################################ -->
     <ul>
       <li><a href="../index.html">首頁</a></li>
-      <li><a href="#">工作經歷</a></li>
+      <li><a href="#">聯絡我</a></li>
     </ul>
     <!-- ################################################################################################ -->
   </div>
@@ -69,27 +70,32 @@ Licence URI: https://www.os-templates.com/template-terms
     <!-- ################################################################################################ -->
     <div class="content"> 
       <!-- ################################################################################################ -->
-      <h1>幣威科技(前美商艾普特洛有限公司) — 2020-2022</h1>
-      <img class="imgr borderedbox inspace-5" src="../images/demo/jobs/bpower.png" alt="">
-      <p>負責Android/iOS app開發的工作，主要產品客製化客人需求的應用程式、Android 自動化測試開發工具、Restful API/WebSocket串接、虛擬貨幣自動交易操作機器人。另外使用Python 的實作自動化測試工具、以及虛擬貨幣交易所機器人的交易策略開發、iOS操作App 開發(已上架)。參與設計區塊鏈冷錢包雛形。區塊鏈TRX 結點建立(內部測試)</p>
-      </br></br>
-      <h1>鴻齡科技股份有限公司 — 2019-2020</h1>
-      <img class="imgr borderedbox inspace-5" src="../images/demo/jobs/foxconn.jpeg" alt="">
-      <p>負責Android app開發的工作，主要產品為Android TV，實作客製化Setting、Android device與內外Server溝通之client 端app。</p>
-      </br></br></br></br>
-      <h1>仁寶電腦工業股份有限公司 — 2015-2019</h1>
-      <img class="imgr borderedbox inspace-5" src="../images/demo/jobs/compal.png" alt="">
-      <p>最初的工作內容主要是負責Android手機應用的發展，涉及內部案例的開發，是一個與手錶相關的應用，可以通過BLE開發與公司的智慧手錶做線、數據傳輸和圖片演示，後來還開發了iOS版本的應用， 還參與了 BSP 驅動程式的開發，負責 GPS 和溫度和濕度感測器駕駛員部分、GPS 和溫度和濕度感測器數據，通過 I2C、UART 接收和傳輸單個晶片，隨後由負責製作公司使用的應用程式參與 CES 展會，最後的主要工作是開發智慧揚聲器， 主要部分是使用 Python 在揚聲器上實現伺服器的所有功能。</p>
-      </br></br>
-      <h1>富士康國際股份有限公司 — 2012-2013</h1>
-      <img class="imgr borderedbox inspace-5" src="../images/demo/jobs/foxconn.jpeg" alt="">
-      <p>大學時期跟研究所的學長姐一起參加的校外實務實習，工作內容主要為android 應用程式設計，實習期間，我們被分為兩組，一組偏向智慧控制，而我這組則為3D特效的部分，我們這組最後製作了一些簡單的android widget動畫，其一為刪除手機app時會有火焰刪除的動畫，另一個是在換頁時會有龍捲風旋轉的特效，並在實習結束前在學校有一個成果發表會。</p>
-      </br></br>
+      <h1>專案合作、洽詢，可以透過以下表單或是以下聯絡資訊聯繫</h1>
+      
+      <div id="comments">
+        <form action="mailto:pofenglin079@gmail.com" method="post">
+          <div class="one_third first">
+            <label for="name">姓名 <span>*</span></label>
+            <input type="text" name="name" id="name" value="" size="22" required>
+          </div>
+          <div class="one_third">
+            <label for="email">Email <span>*</span></label>
+            <input type="email" name="email" id="email" value="" size="22" required>
+          </div>
+          <div class="block clear">
+            <label for="title">標題</label>
+            <input type="title" name="title" id="title" value="" size="22">
+          </div>
+          <div class="block clear">
+            <label for="comment">內文</label>
+            <textarea name="comment" id="comment" cols="25" rows="10"></textarea>
+          </div>
+          <div>
+            <input type="submit" name="submit" value="送出">
+          </div>
+        </form>
+      </div>
       <!-- ################################################################################################ -->
-
-      <h1>學經歷過程</h1>
-      <img class="imgr borderedbox inspace-5" src="../images/demo/jobs/jobtree.png" alt="">
-
     </div>
     <!-- ################################################################################################ -->
     <!-- / main body -->
@@ -153,5 +159,34 @@ Licence URI: https://www.os-templates.com/template-terms
 <script src="../layout/scripts/jquery.min.js"></script>
 <script src="../layout/scripts/jquery.backtotop.js"></script>
 <script src="../layout/scripts/jquery.mobilemenu.js"></script>
+<script>
+  function sumbit() {
+    var name = document.getElementById("name").value;
+    var email = document.getElementById("email").value;
+    var phone = document.getElementById("phone").value;
+    var comment = document.getElementById("comment").value;
+
+    if (name != '' && email != ''){
+      // alert("姓名: " + name);
+      // alert("email: " + email);
+      // alert("電話: " + phone);
+      // alert("內文: " + comment);
+      //alert("送出");
+      Email.send({
+        Host: "smtp.gmail.com",
+        Username : "pofenglin079@gmail.com",
+        Password : "nice4seek",
+        To : "pofenglin079@gmail.com",
+        From : "pofenglin079@gmail.com",
+        Subject : "聯絡我",
+        Body : "",
+        }).then(
+          message => alert("mail sent successfully")
+        );
+
+    }
+    
+  }
+</script>
 </body>
 </html>
